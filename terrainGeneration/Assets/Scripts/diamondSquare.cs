@@ -18,11 +18,14 @@ public class diamondSquare : MonoBehaviour {
 		currentTerrain = Terrain.activeTerrain;
 		tData = currentTerrain.terrainData;
 		terrainSize = tData.size;
-		this.size = 257;
-		this.max = this.size - 1;
-
+		this.size = 1025;
 		float[,] data = PopulateDataArray ();
+		data = PopulateDataArray ();
+
 		generateTerrain (data);
+
+
+
 
 	}
 	
@@ -50,7 +53,7 @@ public class diamondSquare : MonoBehaviour {
 		data [max,max] = 1;
 
 
-		for( sideLength = size - 1; sideLength >= 2; sideLength /= 2) {
+		for (sideLength = size - 1; sideLength >= 2; sideLength /= 2) {
 
 			halfSide = sideLength / 2;
 
@@ -67,7 +70,6 @@ public class diamondSquare : MonoBehaviour {
 					val += data [x + sideLength, y + sideLength];
 
 					val /= 4.0f;
-
 					rnd = (Random.value * 2.0f * h) - h;
 					val = Mathf.Clamp01 (val + rnd);
 
@@ -78,37 +80,39 @@ public class diamondSquare : MonoBehaviour {
 			}
 
 			
-		}
+		
 
-		for (x = 0; x < size - 1; x += halfSide) {
+			for (x = 0; x < size - 1; x += halfSide) {
 
-			for (y = (x + halfSide) % sideLength; y < size - 1; y += sideLength) {
 
-				val = data [(x - halfSide + size - 1) % (size - 1), y];
-				val += data [(x + halfSide) % (size - 1), y];
-				val += data [x, (y + halfSide) % (size - 1)];
-				val += data [x, (y - halfSide + size - 1) % (size - 1)];
+				for (y = (x + halfSide) % sideLength; y < size - 1; y += sideLength) {
 
-				val /= 4.0f;
+					val = data [(x - halfSide + size - 1) % (size - 1), y];
+					val += data [(x + halfSide) % (size - 1), y];
+					val += data [x, (y + halfSide) % (size - 1)];
+					val += data [x, (y - halfSide + size - 1) % (size - 1)];
 
-				rnd = (Random.value * 2.0f * h) - h;
-				val = Mathf.Clamp01 (val + rnd);
+					val /= 4.0f;
+					rnd = (Random.value * 2.0f * h) - h;
+					val = Mathf.Clamp01 (val + rnd);
 
-				data [x, y] = val;
+					data [x, y] = val;
 
-				if (x == 0)
-					data [size - 1, y] = val;
+					if (x == 0)
+						data [size - 1, y] = val;
 
-				if (y == 0)
-					data [x, size - 1] = val;
+					if (y == 0)
+						data [x, size - 1] = val;
+				}
+
 			}
-
 			h /= 2.0f;
 		}
-
 		return data;
 
 	}
+
+
 
 
 	private void generateTerrain(float [,] data) {

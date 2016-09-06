@@ -79,8 +79,7 @@ public class diamondSquare : MonoBehaviour {
 
 			}
 
-			
-		
+
 
 			for (x = 0; x < size - 1; x += halfSide) {
 

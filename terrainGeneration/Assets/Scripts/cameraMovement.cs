@@ -16,6 +16,9 @@ public class cameraMovement : MonoBehaviour {
 		minX = minZ = 30;
 		currentTerrain = Terrain.activeTerrain;
 		terrainSize = currentTerrain.terrainData.size;
+		transform.position = new Vector3 (30f, 5000.5f, 214f);
+		transform.Rotate (new Vector3 (47.7343f, 38.7699f, 12.7577f));
+			
 	}
 	
 	// Update is called once per frame
@@ -26,7 +29,6 @@ public class cameraMovement : MonoBehaviour {
 		float terrainHeightAtPosition = currentTerrain.SampleHeight (transform.position);
 
 		transform.Translate (new Vector3 (axisX, 0, axisZ)*Time.deltaTime*speed);
-
 
 		if (terrainHeightAtPosition > transform.position.y) {
 			transform.position = new Vector3 (transform.position.x, 

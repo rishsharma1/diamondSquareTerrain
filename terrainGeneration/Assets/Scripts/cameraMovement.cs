@@ -16,8 +16,8 @@ public class cameraMovement : MonoBehaviour {
 		minX = minZ = 30;
 		currentTerrain = Terrain.activeTerrain;
 		terrainSize = currentTerrain.terrainData.size;
-		transform.position = new Vector3 (30f, 5000.5f, 214f);
-		transform.Rotate (new Vector3 (47.7343f, 38.7699f, 12.7577f));
+		transform.position = new Vector3 (283.32f, 394.742f, 475.003f);
+		transform.Rotate (new Vector3 (66.87f, 172.768f, 350.946f));
 			
 	}
 	

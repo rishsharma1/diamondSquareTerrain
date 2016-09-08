@@ -3,14 +3,15 @@ using System.Collections;
 
 public class diamondSquare : MonoBehaviour {
 
-	public const float DETAIL = 9;
-	public const float ROUGNESS = 0.7f	;
+	public int detail;
+	public int maxHeight;
 
 	Terrain currentTerrain;
 	TerrainData tData;
 	Vector3 terrainSize;
-	int size;
+	Material material;
 	int max;
+	int size;
 
 	// Use this for initialization
 	void Start () {
@@ -18,21 +19,29 @@ public class diamondSquare : MonoBehaviour {
 		currentTerrain = Terrain.activeTerrain;
 		tData = currentTerrain.terrainData;
 		terrainSize = tData.size;
-		this.size = 1025;
+		material = Resources.Load ("landscape") as Material;
+
+		InitialiseTerrain (detail);
+
 		float[,] data = PopulateDataArray ();
 		data = PopulateDataArray ();
-
-		generateTerrain (data);
-
+		generateTerrain (data);;
+		material.SetFloat ("_maxHeight", maxHeight);
 
 
 
 	}
-	
+
+
 	// Update is called once per frame
 	void Update () {
 
 
+	}
+
+	private void InitialiseTerrain(int detail) {
+		this.size = (int) Mathf.Pow(2,detail)+1;
+		this.max = this.size - 1;
 	}
 
 
@@ -47,21 +56,21 @@ public class diamondSquare : MonoBehaviour {
 
 
 		// set the four corner points to inital values
-		data [0,0] = 1;
-		data [max,0] = 1;
-		data [0,max] = 1;
-		data [max,max] = 1;
+		data [0,0] = 0;
+		data [max,0] = 0;
+		data [0,max] = 0;
+		data [max,max] = 0;
 
 
-		for (sideLength = size - 1; sideLength >= 2; sideLength /= 2) {
+		for (sideLength = max; sideLength >= 2; sideLength /= 2) {
 
 			halfSide = sideLength / 2;
 
 
-			for (x = 0; x < size - 1; x += sideLength) {
+			for (x = 0; x < max; x += sideLength) {
 
 
-				for (y = 0; y < size - 1; y += sideLength) {
+				for (y = 0; y < max; y += sideLength) {
 
 
 					val = data [x, y];
@@ -81,15 +90,15 @@ public class diamondSquare : MonoBehaviour {
 
 
 
-			for (x = 0; x < size - 1; x += halfSide) {
+			for (x = 0; x < max; x += halfSide) {
 
 
-				for (y = (x + halfSide) % sideLength; y < size - 1; y += sideLength) {
+				for (y = (x + halfSide) % sideLength; y < max; y += sideLength) {
 
-					val = data [(x - halfSide + size - 1) % (size - 1), y];
-					val += data [(x + halfSide) % (size - 1), y];
-					val += data [x, (y + halfSide) % (size - 1)];
-					val += data [x, (y - halfSide + size - 1) % (size - 1)];
+					val = data [(x - halfSide + max) % (max), y];
+					val += data [(x + halfSide) % (max), y];
+					val += data [x, (y + halfSide) % (max)];
+					val += data [x, (y - halfSide + max) % (max)];
 
 					val /= 4.0f;
 					rnd = (Random.value * 2.0f * h) - h;
@@ -98,10 +107,10 @@ public class diamondSquare : MonoBehaviour {
 					data [x, y] = val;
 
 					if (x == 0)
-						data [size - 1, y] = val;
+						data [max, y] = val;
 
 					if (y == 0)
-						data [x, size - 1] = val;
+						data [x, max] = val;
 				}
 
 			}

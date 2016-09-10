@@ -1,3 +1,5 @@
-# diamondSquareTerrain
+# Generating Terrain Using Diamond Square Algorithm
+
 Generating landscape using the diamond square algorithm
-![alt tag](http://i.imgur.com/oQZBc3f.gif)
+
+![](http://i.imgur.com/RCGyEND.gif)

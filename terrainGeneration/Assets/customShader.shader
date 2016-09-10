@@ -1,58 +1,58 @@
-﻿Shader "Unlit/customShader"
-{
+﻿Shader "Custom/PhongShader" {
+    Properties {
+        _MainTint ("Diffuse Tint", Color) = (1,1,1,1)
+        _MainTex ("Base (RGB)", 2D) = "white" {}
+        _SpecularColor ("Specular Color", Color) = (1,1,1,1)
+        _Specular("Specular Power", Range(0,100)) = 1
 
-	SubShader
-	{
+        _ReflectionCoefficient ("Reflection Coefficient", Range(0,1)) = 0.3
+    }
+    SubShader {
+        //Tags { "RenderType"="Opaque" }
+                
+        CGPROGRAM
+        #pragma surface surf BlinnPhong
 
-		Pass
-		{
-			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
-
-			uniform float _maxHeight;
-			
-			#include "UnityCG.cginc"
-
-			struct vertIn
-			{
-				float4 vertex : POSITION;
-				float4 color : COLOR;
-			};
-
-			struct vertOut
-			{
-				float4 vertex : SV_POSITION;
-				float4 color : COLOR;
-			};
+        sampler2D _MainTex;
+        float4 _MainTint;
+        float4 _SpecularColor;
+        float _Specular;
 
 
-			// Implementation of the vertex shader
-			vertOut vert(vertIn v)
-			{
-				vertOut o;
-				o.vertex = mul(UNITY_MATRIX_MVP, v.vertex);
-				float4 colour;
+        //Shader referenced from unity's shaders
+        half4 LightingBlinnPhong (SurfaceOutput a, half3 lightDir, half3 viewDir, 
+        half3 normal, half4 color,half atten ) {
 
-				if (v.vertex.y > _maxHeight-50) {
+            lightDir = normalize(lightDir);
+            viewDir = normalize(viewDir);
 
-					colour = float4(1,1,1,1);
-				}
-				else {
-					colour = float4(0.09804, 0.54902, 0.09804, 1);
-				}
+            half3 halfVector = normalize( lightDir + viewDir );
 
-				o.color = colour;				
-				return o;
-			}
-			
+            //diffuse
+            half d = dot( normal, lightDir );
+           
+            float nh = saturate( dot( halfVector, normal ) );
+            float spec = pow( nh, _Specular) * color.a;
+           
+            half4 c;    
+            c.rgb = (color.rgb * _MainTint.rgb * d +
+                _SpecularColor.rgb * spec) * (atten * 2);
 
-			// Implementation of the fragment shader
-			fixed4 frag(vertOut v) : SV_Target
-			{
-				return v.color;
-			}
-			ENDCG
-		}
-	}
+            // specular passes by default put highlights to overbright
+            c.a = _SpecularColor.a * spec * atten;
+            return c;
+        }
+
+        struct Input {
+            float2 uv_MainTex;
+        };
+
+        void surf (Input IN, inout SurfaceOutput o) {
+            o.Albedo = tex2D (_MainTex, IN.uv_MainTex).rgb * _MainTint;
+            o.Specular = _Specular;
+        }
+
+        ENDCG
+    }
+    FallBack "Diffuse"
 }

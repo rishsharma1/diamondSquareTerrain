@@ -4,7 +4,15 @@ using System.Collections;
 public class diamondSquare : MonoBehaviour {
 
 	public int detail;
-	public int maxHeight;
+	public int snowHeight;
+	public int grassHeight;
+	public int dirtHeight;
+
+
+	private const int GRASS = 0;
+	private const int DIRT = 1;
+	private const int SNOW = 2;
+
 
 	Terrain currentTerrain;
 	TerrainData tData;
@@ -25,8 +33,8 @@ public class diamondSquare : MonoBehaviour {
 
 		float[,] data = PopulateDataArray ();
 		data = PopulateDataArray ();
-		generateTerrain (data);;
-		material.SetFloat ("_maxHeight", maxHeight);
+		generateTerrain (data);
+		addTextures ();
 
 
 
@@ -44,6 +52,38 @@ public class diamondSquare : MonoBehaviour {
 		this.max = this.size - 1;
 	}
 
+
+	private void addTextures() {
+
+		float[,,] alphaData = tData.GetAlphamaps (0, 0, tData.alphamapWidth, tData.alphamapHeight);
+		Debug.Log (tData.alphamapHeight);
+		Debug.Log (tData.alphamapWidth);
+		for (int y = 0; y < tData.alphamapHeight; y++) {
+
+			for (int x = 0; x < tData.alphamapWidth; x++) {
+
+				float height = currentTerrain.SampleHeight (new Vector3 (y,0 , x));
+
+				if (height > snowHeight) {
+					alphaData [x, y, SNOW] = 1;
+					alphaData [x, y, DIRT] = 0;
+					alphaData [x, y, GRASS] = 0;
+
+				} else if (height > grassHeight) {
+					alphaData [x, y, GRASS] = 1;
+					alphaData [x, y, DIRT] = 0;
+					alphaData [x, y, SNOW] = 0;
+				
+				} else {
+					alphaData [x, y, DIRT] = 1;
+					alphaData [x, y, GRASS] = 0;
+					alphaData [x, y, SNOW] = 0;
+				}
+			}
+		}
+		tData.SetAlphamaps (0, 0, alphaData);
+
+	}
 
 	private float [,] PopulateDataArray() {
 

@@ -3,6 +3,9 @@ using System.Collections;
 
 public class sunRotation : MonoBehaviour {
 
+	/*
+	 * This script is responsible for rotating the sun around the z axis
+	 */
 	public float speed;
 	float size;
 

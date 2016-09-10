@@ -1,4 +1,6 @@
 ﻿Shader "Custom/PhongShader" {
+
+
     Properties {
         _MainTint ("Diffuse Tint", Color) = (1,1,1,1)
         _MainTex ("Base (RGB)", 2D) = "white" {}
@@ -8,7 +10,6 @@
         _ReflectionCoefficient ("Reflection Coefficient", Range(0,1)) = 0.3
     }
     SubShader {
-        //Tags { "RenderType"="Opaque" }
                 
         CGPROGRAM
         #pragma surface surf BlinnPhong
@@ -31,15 +32,15 @@
             //diffuse
             half d = dot( normal, lightDir );
            
-            float nh = saturate( dot( halfVector, normal ) );
-            float spec = pow( nh, _Specular) * color.a;
+            float nh = saturate(dot( halfVector, normal ));
+            //specular
+            float s = pow( nh, _Specular) * color.a;
            
             half4 c;    
             c.rgb = (color.rgb * _MainTint.rgb * d +
-                _SpecularColor.rgb * spec) * (atten * 2);
+                _SpecularColor.rgb * s) * (atten * 2);
 
-            // specular passes by default put highlights to overbright
-            c.a = _SpecularColor.a * spec * atten;
+            c.a = _SpecularColor.a * s * atten;
             return c;
         }
 

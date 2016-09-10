@@ -26,7 +26,7 @@ public class cameraMovement : MonoBehaviour {
 
 		float axisX = Input.GetAxis ("Horizontal");
 		float axisZ = Input.GetAxis ("Vertical");
-		float terrainHeightAtPosition = currentTerrain.SampleHeight (transform.position);
+		float terrainHeightAtPosition = currentTerrain.SampleHeight (transform.position)+10;
 
 		transform.Translate (new Vector3 (axisX, 0, axisZ)*Time.deltaTime*speed);
 
@@ -60,10 +60,10 @@ public class cameraMovement : MonoBehaviour {
 			transform.Rotate (Vector3.back, rollSpeed * Time.deltaTime);
 
 		if (Input.GetAxis ("Mouse X") < 0) {
-			transform.Rotate (Vector3.up, rollSpeed * Time.deltaTime);
+			transform.Rotate (Vector3.down, rollSpeed * Time.deltaTime);
 		}
 		if (Input.GetAxis ("Mouse X") > 0) {
-			transform.Rotate (Vector3.down, rollSpeed * Time.deltaTime);
+			transform.Rotate (Vector3.up, rollSpeed * Time.deltaTime);
 		}
 		if (Input.GetAxis ("Mouse Y") < 0) {
 			transform.Rotate (Vector3.left, rollSpeed * Time.deltaTime);

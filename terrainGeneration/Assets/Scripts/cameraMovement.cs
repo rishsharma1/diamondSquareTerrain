@@ -29,8 +29,8 @@ public class cameraMovement : MonoBehaviour {
 
 		currentTerrain = Terrain.activeTerrain;
 		terrainSize = currentTerrain.terrainData.size;
-		transform.position = new Vector3 (283.32f, 394.742f, 475.003f);
-		transform.Rotate(new Vector3 (66.87f, 172.768f, 350.946f));
+		transform.position = new Vector3 (312.907f, 888.208f, 513f);
+		transform.Rotate(new Vector3 (60.0178f, 159.302f, 353.008f));
 			
 	}
 	

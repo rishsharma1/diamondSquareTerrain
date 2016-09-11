@@ -112,10 +112,10 @@ public class diamondSquare : MonoBehaviour {
 
 
 		// set the four corner points to inital values
-		data [0,0] = 0;
-		data [max,0] = 0;
-		data [0,max] = 0;
-		data [max,max] = 0;
+		data [0,0] = 1;
+		data [max,0] = 1;
+		data [0,max] = 1;
+		data [max,max] = 1;
 
 
 		for (sideLength = max; sideLength >= 2; sideLength /= 2) {
